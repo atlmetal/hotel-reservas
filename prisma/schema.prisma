@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ReservationEstado {
+  PENDIENTE_PAGO
+  CONFIRMADA
+  PAGO_RECHAZADO
+}
+
+model Room {
+  id            Int           @id @default(autoincrement())
+  slug          String        @unique
+  nombre        String
+  descripcion   String
+  capacidad     Int
+  tarifaNocheCop Int
+  reservations  Reservation[]
+}
+
+model Reservation {
+  id                String            @id @default(cuid())
+  roomId            Int
+  room              Room              @relation(fields: [roomId], references: [id])
+  checkIn           DateTime          @db.Date
+  checkOut          DateTime          @db.Date
+  nombre            String
+  email             String
+  celular           String
+  huespedes         Int
+  noches            Int
+  totalCop          Int
+  referencia        String            @unique
+  estado            ReservationEstado @default(PENDIENTE_PAGO)
+  payuTransactionId String?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  @@index([roomId, estado])
+}
