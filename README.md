@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Reservas Hotel Aurora
 
-## Getting Started
+MVP para reservar una habitación de un hotel pequeño y pagarla en línea con el WebCheckout de PayU
+Latam en su sandbox. Next.js (App Router), Prisma con PostgreSQL y despliegue en Vercel con una base
+Neon. Los requisitos están en [`docs/prd.md`](docs/prd.md).
 
-First, run the development server:
+En producción: https://hotel-reservas-psi.vercel.app
+
+## Correr en local
+
+Requisitos: Node 22 y un PostgreSQL al que llegue `DATABASE_URL`.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env.local     # completar DATABASE_URL y APP_URL=http://localhost:3000
+npm install
+npx prisma migrate deploy      # crea las tablas
+npm run db:seed                # tres habitaciones; se puede repetir sin duplicar
+npm run dev                    # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Comprobaciones: `npm test` (Vitest), `npm run lint` y `npm run build`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Variables de entorno
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Todas se leen en el servidor; ninguna llega al navegador.
 
-## Learn More
+| Variable | Valor |
+|---|---|
+| `DATABASE_URL` | Conexión a PostgreSQL que usa la app (en Neon, la del pool) |
+| `DATABASE_URL_UNPOOLED` | Solo en Neon: conexión directa que usa `prisma migrate` |
+| `APP_URL` | URL pública de la app, sin `/` final; arma `responseUrl` y `confirmationUrl` |
+| `PAYU_CHECKOUT_URL` | `https://sandbox.checkout.payulatam.com/ppp-web-gateway-payu/` |
+| `PAYU_REPORTS_URL` | `https://sandbox.api.payulatam.com/reports-api/4.0/service.cgi` |
+| `PAYU_API_KEY`, `PAYU_API_LOGIN`, `PAYU_MERCHANT_ID`, `PAYU_ACCOUNT_ID` | Credenciales públicas del sandbox de Colombia (ver `.env.example`) |
+| `PAYU_TEST` | `1` en sandbox |
 
-To learn more about Next.js, take a look at the following resources:
+## Desplegar en Vercel
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Importar el repositorio en Vercel: cada push a `main` despliega a producción y cada pull request
+   genera un preview.
+2. En Storage, crear una base Neon y conectarla al proyecto con el prefijo `DATABASE`: así quedan
+   `DATABASE_URL` y `DATABASE_URL_UNPOOLED`.
+3. Cargar las variables de PayU y `APP_URL` con el dominio de producción.
+4. El script `build` genera el cliente de Prisma, aplica las migraciones, siembra las habitaciones
+   (la semilla es idempotente) y compila la app.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Probar el pago
 
-## Deploy on Vercel
+En la página de pago, “Pagar con PayU” lleva al WebCheckout del sandbox. Con la tarjeta Visa
+`4111 1111 1111 1111` y vencimiento en un año futuro:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Aprobado: nombre del tarjetahabiente `APPROVED`, CVV `777` y mes menor que 6.
+- Rechazado: nombre `REJECTED`, CVV `666` y mes mayor que 6.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Al volver, la página de resultado verifica la firma de PayU y consulta la API de consultas antes de
+cambiar el estado. En la versión desplegada, PayU llama además a `POST /api/webhooks/payu`; en local
+esa URL no es alcanzable desde PayU y se prueba con peticiones simuladas:
+
+```bash
+REF=AUR-20261019-ABC123   # referencia de una reserva existente
+SIGN=$(printf '%s' "4Vj8eK4rloUd272L48hsrarnUA~508029~$REF~180000.0~COP~4" | md5sum | cut -d' ' -f1)
+curl -X POST http://localhost:3000/api/webhooks/payu \
+  -d "merchant_id=508029&reference_sale=$REF&value=180000.00&currency=COP&state_pol=4&transaction_id=tx-1&sign=$SIGN"
+```
