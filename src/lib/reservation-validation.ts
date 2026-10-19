@@ -1,3 +1,4 @@
+import { fechaEnBogota, parseDateOnly } from "./dates";
 import { calcularNoches } from "./pricing";
 
 export type ReservationFormInput = {
@@ -8,7 +9,10 @@ export type ReservationFormInput = {
   celular: string;
   huespedes: number;
   capacidad: number;
-  /** Fecha de referencia “hoy” (YYYY-MM-DD o Date). Por defecto UTC de ahora. */
+  /**
+   * Fecha de referencia “hoy” (YYYY-MM-DD o Date).
+   * Si es Date u omitida, se interpreta en America/Bogota.
+   */
   hoy?: string | Date;
 };
 
@@ -31,7 +35,7 @@ export function validarFormularioReserva(
   input: ReservationFormInput,
 ): ReservationFieldErrors {
   const errors: ReservationFieldErrors = {};
-  const hoy = toDateOnlyString(input.hoy ?? new Date());
+  const hoy = resolverHoy(input.hoy);
 
   const checkIn = input.checkIn?.trim() ?? "";
   const checkOut = input.checkOut?.trim() ?? "";
@@ -85,23 +89,18 @@ export function validarFormularioReserva(
   return errors;
 }
 
+function resolverHoy(hoy: string | Date | undefined): string {
+  if (typeof hoy === "string") {
+    return hoy.slice(0, 10);
+  }
+  return fechaEnBogota(hoy ?? new Date());
+}
+
 function isValidDateString(value: string): boolean {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
   const d = parseDateOnly(value);
-  return toDateOnlyString(d) === value;
-}
-
-function parseDateOnly(value: string): Date {
-  const [y, m, d] = value.split("-").map(Number);
-  return new Date(Date.UTC(y, m - 1, d));
-}
-
-function toDateOnlyString(value: string | Date): string {
-  if (typeof value === "string") {
-    return value.slice(0, 10);
-  }
-  const y = value.getUTCFullYear();
-  const m = String(value.getUTCMonth() + 1).padStart(2, "0");
-  const d = String(value.getUTCDate()).padStart(2, "0");
-  return `${y}-${m}-${d}`;
+  const y = d.getUTCFullYear();
+  const m = String(d.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(d.getUTCDate()).padStart(2, "0");
+  return `${y}-${m}-${day}` === value;
 }
