@@ -30,7 +30,7 @@ export async function POST(request: Request) {
     body = (await request.json()) as CreateBody;
   } catch {
     return NextResponse.json(
-      { errors: { nombre: "El cuerpo de la petición no es JSON válido" } },
+      { error: "El cuerpo de la petición no es JSON válido" },
       { status: 400 },
     );
   }

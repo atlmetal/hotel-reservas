@@ -1,4 +1,4 @@
-import { createHash } from "node:crypto";
+import { createHash, timingSafeEqual } from "node:crypto";
 
 export type ReservationEstado =
   | "PENDIENTE_PAGO"
@@ -139,6 +139,38 @@ export function mapearEstadoConfirmacionPayu(
     default:
       return null;
   }
+}
+
+/** Orden de ORDER_DETAIL_BY_REFERENCE_CODE; solo los campos que se usan. */
+export type OrdenPayu = {
+  transactions?: {
+    id: string;
+    transactionResponse?: { state?: string; operationDate?: number };
+  }[];
+};
+
+/**
+ * Transacción más reciente (mayor operationDate) entre todas las órdenes de
+ * una referencia. null si PayU todavía no tiene ninguna.
+ */
+export function transaccionMasReciente(
+  payload: OrdenPayu[] | null | undefined,
+): { id: string; state: string } | null {
+  const transacciones = (payload ?? [])
+    .flatMap((orden) => orden.transactions ?? [])
+    .filter((tx) => tx.transactionResponse?.state);
+  if (transacciones.length === 0) return null;
+  const fecha = (tx: (typeof transacciones)[number]) =>
+    tx.transactionResponse?.operationDate ?? 0;
+  const ultima = transacciones.reduce((a, b) => (fecha(b) > fecha(a) ? b : a));
+  return { id: ultima.id, state: ultima.transactionResponse!.state! };
+}
+
+/** Compara firmas MD5 sin distinguir mayúsculas y en tiempo constante. */
+export function firmaValida(esperada: string, recibida: string): boolean {
+  const a = Buffer.from(esperada.toLowerCase());
+  const b = Buffer.from(recibida.toLowerCase());
+  return a.length === b.length && timingSafeEqual(a, b);
 }
 
 function md5(value: string): string {

@@ -4,10 +4,12 @@ import {
   firmaConfirmacionPayu,
   firmaFormularioPayu,
   firmaRespuestaPayu,
+  firmaValida,
   formatNewValueConfirmacion,
   formatNewValueRespuesta,
   mapearEstadoConfirmacionPayu,
   mapearEstadoConsultaPayu,
+  transaccionMasReciente,
 } from "./payu";
 
 const apiKey = "4Vj8eK4rloUd272L48hsrarnUA";
@@ -166,5 +168,55 @@ describe("mapearEstadoConfirmacionPayu (F6)", () => {
   it("no cambia con cualquier otro valor", () => {
     expect(mapearEstadoConfirmacionPayu(7)).toBeNull();
     expect(mapearEstadoConfirmacionPayu("1")).toBeNull();
+  });
+});
+
+describe("transaccionMasReciente (F5, API de consultas)", () => {
+  it("devuelve null si PayU no tiene órdenes", () => {
+    expect(transaccionMasReciente(null)).toBeNull();
+    expect(transaccionMasReciente([])).toBeNull();
+    expect(transaccionMasReciente([{ transactions: [] }])).toBeNull();
+  });
+
+  it("toma la de mayor operationDate entre todas las órdenes", () => {
+    const payload = [
+      {
+        transactions: [
+          { id: "tx-1", transactionResponse: { state: "DECLINED", operationDate: 100 } },
+        ],
+      },
+      {
+        transactions: [
+          { id: "tx-3", transactionResponse: { state: "APPROVED", operationDate: 300 } },
+          { id: "tx-2", transactionResponse: { state: "PENDING", operationDate: 200 } },
+        ],
+      },
+    ];
+    expect(transaccionMasReciente(payload)).toEqual({ id: "tx-3", state: "APPROVED" });
+  });
+
+  it("ignora transacciones sin estado", () => {
+    const payload = [
+      {
+        transactions: [
+          { id: "tx-1", transactionResponse: { state: "APPROVED", operationDate: 100 } },
+          { id: "tx-2", transactionResponse: { operationDate: 200 } },
+        ],
+      },
+    ];
+    expect(transaccionMasReciente(payload)).toEqual({ id: "tx-1", state: "APPROVED" });
+  });
+});
+
+describe("firmaValida", () => {
+  const firma = md5("x");
+
+  it("acepta la misma firma sin importar mayúsculas", () => {
+    expect(firmaValida(firma, firma.toUpperCase())).toBe(true);
+  });
+
+  it("rechaza una firma distinta o vacía", () => {
+    expect(firmaValida(firma, md5("y"))).toBe(false);
+    expect(firmaValida(firma, "")).toBe(false);
   });
 });
