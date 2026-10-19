@@ -1,7 +1,8 @@
 # PRD: Reservas Hotel Aurora
 
-Versión 1.1, 10 de octubre de 2026. Documento de requisitos para generar la aplicación con Cursor y para
-que TestSprite derive el plan de pruebas. Electiva Énfasis III, unidad 4.
+Versión 1.2, 19 de octubre de 2026. Documento de requisitos para generar la aplicación con Cursor y para
+que TestSprite derive el plan de pruebas. Electiva Énfasis III, unidad 4. La 1.2 agrega a F6 la
+verificación del monto y la moneda, que faltaba y se descubrió al revisar la prueba TC006 de backend.
 
 ## 1. Propósito
 
@@ -121,8 +122,10 @@ parámetros de PayU, solo muestra el estado guardado.
 contra MD5 de `apiKey~merchant_id~reference_sale~new_value~currency~state_pol`, donde `new_value` es
 `value` con un solo decimal si el segundo decimal es cero (150.00 da 150.0) y con los dos decimales si
 no (150.25 queda 150.25). Si no coincide, responde 403 y no cambia nada. Si coincide, busca la reserva
-por `reference_sale`, guarda `transaction_id` y aplica: `4` pasa a `CONFIRMADA`; `6` y `5` pasan a
-`PAGO_RECHAZADO`; cualquier otro valor no cambia nada. Responde 200 con el texto `OK`, sin HTML. En
+por `reference_sale` (404 si no existe) y comprueba que `value` sea igual al total de la reserva y que
+`currency` sea `COP` (si no, responde 400 y no cambia nada). Luego guarda `transaction_id` y aplica:
+`4` pasa a `CONFIRMADA`; `6` y `5` pasan a `PAGO_RECHAZADO`; cualquier otro valor no cambia nada.
+Responde 200 con el texto `OK`, sin HTML. En
 desarrollo local esta URL no es alcanzable desde PayU, así que se prueba con peticiones simuladas; en
 Vercel sí recibe las confirmaciones reales porque la URL viaja en cada formulario de pago.
 

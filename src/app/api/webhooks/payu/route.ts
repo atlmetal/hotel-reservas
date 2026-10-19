@@ -45,6 +45,13 @@ export async function POST(request: Request) {
   if (!reservation) {
     return texto("Reserva no encontrada", 404);
   }
+  // Una confirmación firmada por otro monto o moneda no es el pago de esta reserva.
+  if (
+    campo("currency") !== "COP" ||
+    Number(campo("value")) !== reservation.totalCop
+  ) {
+    return texto("El monto o la moneda no coinciden con la reserva", 400);
+  }
 
   const estado = mapearEstadoConfirmacionPayu(campo("state_pol"));
   await prisma.reservation.update({
