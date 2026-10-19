@@ -1,0 +1,52 @@
+[
+  {
+    "id": "TC001",
+    "title": "health_check_api_returns_status_ok",
+    "description": "Verify that GET /api/health returns HTTP 200 with JSON body {\"status\":\"ok\"} when the service is running."
+  },
+  {
+    "id": "TC002",
+    "title": "rooms_catalog_api_returns_seeded_rooms",
+    "description": "Verify that GET /api/rooms returns HTTP 200 with the three seeded rooms including their id, slug, nombre, descripcion, capacidad, and tarifaNocheCop."
+  },
+  {
+    "id": "TC003",
+    "title": "reservation_creation_with_valid_data",
+    "description": "Verify that POST /api/reservations with valid roomSlug, checkIn, checkOut, guest data, and huespedes returns HTTP 201 with a reservation in PENDIENTE_PAGO state including noches, totalCop, and referencia, and that GET /api/reservations/{id} returns the stored reservation with room details."
+  },
+  {
+    "id": "TC004",
+    "title": "reservation_creation_with_invalid_fields",
+    "description": "Verify that POST /api/reservations with invalid input fields such as past check-in date, invalid email, or huespedes exceeding room capacity returns HTTP 400 with detailed field-level validation errors."
+  },
+  {
+    "id": "TC005",
+    "title": "reservation_creation_with_unknown_roomslug",
+    "description": "Verify that POST /api/reservations with an unknown roomSlug returns HTTP 404 with error message {\"error\":\"Habitación no encontrada\"}."
+  },
+  {
+    "id": "TC006",
+    "title": "reservation_creation_with_date_conflict",
+    "description": "Verify that POST /api/reservations for dates overlapping a CONFIRMADA reservation of the same room returns HTTP 409 with error message {\"error\":\"La habitación ya tiene una reserva confirmada en esas fechas\"}."
+  },
+  {
+    "id": "TC007",
+    "title": "reservation_retrieval_with_missing_id",
+    "description": "Verify that GET /api/reservations/{id} with a non-existent reservation id returns HTTP 404 with error message {\"error\":\"Reserva no encontrada\"}."
+  },
+  {
+    "id": "TC008",
+    "title": "payu_confirmation_webhook_valid_request",
+    "description": "Verify that POST /api/webhooks/payu with valid form-encoded merchant_id, reference_sale, value, currency, state_pol, sign, and transaction_id returns HTTP 200 OK, updates the matched reservation's transaction_id, and changes its status to CONFIRMADA or PAGO_RECHAZADO based on state_pol."
+  },
+  {
+    "id": "TC009",
+    "title": "payu_confirmation_webhook_invalid_signature",
+    "description": "Verify that POST /api/webhooks/payu with invalid signature or merchant_id returns HTTP 403 with text 'Firma inválida' and does not change any reservation."
+  },
+  {
+    "id": "TC010",
+    "title": "payu_confirmation_webhook_unknown_reference_sale",
+    "description": "Verify that POST /api/webhooks/payu with a reference_sale that does not match any reservation returns HTTP 404 with text 'Reserva no encontrada'."
+  }
+]

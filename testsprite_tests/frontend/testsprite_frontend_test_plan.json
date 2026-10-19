@@ -1,0 +1,657 @@
+[
+  {
+    "id": "TC001",
+    "title": "Complete a valid reservation and reach payment",
+    "description": "A guest can submit a valid booking form and continue to the payment page after the reservation is created.",
+    "category": "Formulario de reserva con validación",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reservar/estandar"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid check-in date into the check-in date field"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid check-out date into the check-out date field"
+      },
+      {
+        "type": "action",
+        "description": "Fill the guest full name field with a valid name"
+      },
+      {
+        "type": "action",
+        "description": "Fill the email field with a valid email address"
+      },
+      {
+        "type": "action",
+        "description": "Fill the mobile number field with a valid Colombian mobile number"
+      },
+      {
+        "type": "action",
+        "description": "Fill the guest count field with a valid number of guests"
+      },
+      {
+        "type": "action",
+        "description": "Click to continue to payment"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the payment page is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the reservation summary is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC002",
+    "title": "Complete an approved sandbox payment and see confirmed status",
+    "description": "A guest can finish a sandbox payment and return to the result page with a confirmed reservation status.",
+    "category": "Pago con PayU sandbox",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reservas/[id]/pago for an existing reservation"
+      },
+      {
+        "type": "action",
+        "description": "Click to start payment with PayU"
+      },
+      {
+        "type": "action",
+        "description": "Enter the approved sandbox card details"
+      },
+      {
+        "type": "action",
+        "description": "Submit the sandbox payment"
+      },
+      {
+        "type": "action",
+        "description": "Return to the hotel site"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the result page is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the reservation is marked as confirmed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC003",
+    "title": "Browse room catalog and start a reservation",
+    "description": "A guest can review the three available rooms on the home page and open the booking flow for a selected room.",
+    "category": "Catálogo de habitaciones",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the three room cards are displayed"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to reserve one of the rooms"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the booking form for that room is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC004",
+    "title": "Open the PayU sandbox checkout from a reservation",
+    "description": "A guest can start the PayU sandbox checkout from the payment page.",
+    "category": "Pago con PayU sandbox",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reservas/[id]/pago for an existing reservation"
+      },
+      {
+        "type": "action",
+        "description": "Click to start payment with PayU"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the PayU sandbox checkout page is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC005",
+    "title": "Complete a rejected sandbox payment and see rejected status",
+    "description": "A guest can finish a sandbox payment and return to the result page with a rejected reservation status.",
+    "category": "Pago con PayU sandbox",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reservas/[id]/pago for an existing reservation"
+      },
+      {
+        "type": "action",
+        "description": "Click to start payment with PayU"
+      },
+      {
+        "type": "action",
+        "description": "Enter the rejected sandbox card details"
+      },
+      {
+        "type": "action",
+        "description": "Submit the sandbox payment"
+      },
+      {
+        "type": "action",
+        "description": "Return to the hotel site"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the result page is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the reservation is marked as rejected"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC006",
+    "title": "Ver estado y detalle de una reserva en el resultado del pago",
+    "description": "Verifica que la página de resultado muestre el estado de una reserva junto con sus datos principales y el identificador de transacción cuando existe una reserva válida.",
+    "category": "Resultado del pago",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reservas/1/resultado"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a reservation status is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the reservation reference, room, dates, total, and transaction identifier are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC007",
+    "title": "Open the Standard room booking flow from the catalog",
+    "description": "A guest can start a reservation for the Standard room from the catalog.",
+    "category": "Catálogo de habitaciones",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to reserve the Standard room"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the booking form for the Standard room is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC008",
+    "title": "Open the Suite Aurora booking flow from the catalog",
+    "description": "A guest can start a reservation for the Suite Aurora room from the catalog.",
+    "category": "Catálogo de habitaciones",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to reserve the Suite Aurora room"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the booking form for the Suite Aurora room is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC009",
+    "title": "Actualizar el estado mostrado en el resultado del pago",
+    "description": "Verifica que al volver al resultado de una reserva el estado visible se actualice con la información más reciente almacenada.",
+    "category": "Resultado del pago",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reservas/1/resultado"
+      },
+      {
+        "type": "action",
+        "description": "Wait for the payment result page to finish loading"
+      },
+      {
+        "type": "action",
+        "description": "Refresh the result page through the page controls"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the latest reservation status is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the reservation summary remains visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC010",
+    "title": "Review reservation summary before paying",
+    "description": "A guest can open the payment page and review the reservation reference, room, nights, and total before starting PayU checkout.",
+    "category": "Pago con PayU sandbox",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reservas/[id]/pago for an existing reservation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the reservation summary is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the payment action is available"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC011",
+    "title": "Ver el listado de reservas ordenado por fecha",
+    "description": "Verifica que la lista de reservas muestre las reservas más recientes primero y permita abrir el resultado de una reserva.",
+    "category": "Lista de reservas",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reservas"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify reservations are displayed in descending creation order"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify each reservation row provides access to its result page"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC012",
+    "title": "Permitir reintentar un pago rechazado",
+    "description": "Verifica que una reserva con pago rechazado muestre la opción de reintento y genere una nueva referencia para pagar otra vez.",
+    "category": "Resultado del pago",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reservas/1/resultado"
+      },
+      {
+        "type": "action",
+        "description": "Wait for the payment result page to finish loading"
+      },
+      {
+        "type": "action",
+        "description": "Click the option to retry the payment"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a new payment reference is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the payment page for the reservation is available"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC013",
+    "title": "View the reservations list ordered by newest first",
+    "description": "Reception can open the reservations list and see reservations ordered by creation date with access to each reservation detail.",
+    "category": "Lista de reservas",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reservas"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the reservations list is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the reservations are ordered from newest to oldest"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC014",
+    "title": "Abrir el resultado de una reserva desde el listado",
+    "description": "Verifica que desde el listado de reservas se pueda abrir una reserva específica y revisar su resultado.",
+    "category": "Lista de reservas",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reservas"
+      },
+      {
+        "type": "action",
+        "description": "Click the access point for one reservation result"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the reservation result page is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the selected reservation details are shown"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC015",
+    "title": "Open a reservation from the reservations list",
+    "description": "Reception can open a reservation from the list and review its detail or result page.",
+    "category": "Lista de reservas",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reservas"
+      },
+      {
+        "type": "action",
+        "description": "Click a reservation in the list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the reservation detail or result page is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC016",
+    "title": "Show live nights and total while booking",
+    "description": "A guest can see the number of nights and the total price update while completing the reservation form.",
+    "category": "Formulario de reserva con validación",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reservar/superior"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid check-in date into the check-in date field"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid check-out date into the check-out date field"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the nights calculation is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the total price calculation is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC017",
+    "title": "Reject a booking with an invalid date range",
+    "description": "A guest cannot continue when the check-out date is earlier than the check-in date and sees a date validation error.",
+    "category": "Formulario de reserva con validación",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reservar/estandar"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid check-in date into the check-in date field"
+      },
+      {
+        "type": "action",
+        "description": "Fill an earlier check-out date into the check-out date field"
+      },
+      {
+        "type": "action",
+        "description": "Fill the guest full name field with a valid name"
+      },
+      {
+        "type": "action",
+        "description": "Fill the email field with a valid email address"
+      },
+      {
+        "type": "action",
+        "description": "Fill the mobile number field with a valid Colombian mobile number"
+      },
+      {
+        "type": "action",
+        "description": "Fill the guest count field with a valid number of guests"
+      },
+      {
+        "type": "action",
+        "description": "Click to continue to payment"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a date validation error is visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC018",
+    "title": "Mostrar la página personalizada de no encontrado en una reserva inexistente",
+    "description": "Verifica que una reserva inexistente muestre la página personalizada de no encontrado y ofrezca una salida al catálogo.",
+    "category": "Páginas de error no encontradas",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reservas/does-not-exist/resultado"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a custom not found message is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a link back to the catalog is available"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC019",
+    "title": "Reject a booking with a past check-in date",
+    "description": "A guest cannot continue when the check-in date is in the past and sees a validation error.",
+    "category": "Formulario de reserva con validación",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reservar/suite-aurora"
+      },
+      {
+        "type": "action",
+        "description": "Fill a past check-in date into the check-in date field"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid check-out date into the check-out date field"
+      },
+      {
+        "type": "action",
+        "description": "Fill the guest full name field with a valid name"
+      },
+      {
+        "type": "action",
+        "description": "Fill the email field with a valid email address"
+      },
+      {
+        "type": "action",
+        "description": "Fill the mobile number field with a valid Colombian mobile number"
+      },
+      {
+        "type": "action",
+        "description": "Fill the guest count field with a valid number of guests"
+      },
+      {
+        "type": "action",
+        "description": "Click to continue to payment"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a check-in date validation error is visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC020",
+    "title": "Ver el estado vacío del listado de reservas",
+    "description": "Verifica que cuando no existen reservas la página muestre un estado vacío claro en lugar de una tabla.",
+    "category": "Lista de reservas",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reservas"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an empty state message is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the reservations table is not displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC021",
+    "title": "Handle an unknown route with the custom not-found page",
+    "description": "A visitor reaching an unknown route sees the custom not-found page and can return to the catalog.",
+    "category": "Página de no encontrada",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to an unknown route"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the custom not-found page is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a link back to the catalog is available"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC022",
+    "title": "Volver al catálogo desde la página de no encontrado",
+    "description": "Verifica que desde una página de no encontrado se pueda regresar al catálogo de habitaciones.",
+    "category": "Páginas de error no encontradas",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reservas/does-not-exist/resultado"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to return to the catalog"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the room catalog is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the three rooms are visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC023",
+    "title": "Show field validation errors for invalid guest details",
+    "description": "A guest sees field-level validation errors when entering invalid email, mobile number, or guest count information.",
+    "category": "Formulario de reserva con validación",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reservar/superior"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid check-in date into the check-in date field"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid check-out date into the check-out date field"
+      },
+      {
+        "type": "action",
+        "description": "Fill the guest full name field with a valid name"
+      },
+      {
+        "type": "action",
+        "description": "Fill the email field with an invalid email address"
+      },
+      {
+        "type": "action",
+        "description": "Fill the mobile number field with an invalid mobile number"
+      },
+      {
+        "type": "action",
+        "description": "Fill the guest count field with an invalid number of guests"
+      },
+      {
+        "type": "action",
+        "description": "Click to continue to payment"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify field-level validation errors are visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the booking cannot proceed"
+      }
+    ],
+    "priority": "Low"
+  }
+]
