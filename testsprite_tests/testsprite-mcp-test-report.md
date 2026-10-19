@@ -107,8 +107,8 @@ Columnas: estado en la primera corrida y, si hubo, en la repetición; severidad 
 | Requisito | Casos | Estado final |
 |---|---|---|
 | F1 Catálogo | 3 de frontend | 3 de 3 |
-| F2 Formulario y validaciones | 5 de frontend | 5 de 5 |
-| F3 Crear reserva (201, 400, 404, 409) | 1 de frontend y 4 de backend | 5 de 5 |
+| F2 y F3 desde la interfaz | 5 de frontend (TC001 crea la reserva) | 5 de 5 |
+| F3 por API (201, 400, 404, 409) | 4 de backend | 4 de 4 |
 | F4 Página de pago | 4 de frontend | 4 de 4 |
 | F5 Resultado del pago | 3 de frontend | 3 de 3, uno tras repetición |
 | F6 Confirmación | 3 de backend | 3 de 3, tras corrección y repetición |
